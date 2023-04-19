@@ -1,9 +1,9 @@
 Name:                kim-api
-Version:             2.1.3
+Version:             2.3.0
 %global sover   2
 Release:             1
 Summary:             Open Knowledgebase of Interatomic Models KIM API
-License:             CDDL-1.0
+License:             LGPL-2.1-or-later
 Url:                 https://www.openkim.org
 Source0:             https://s3.openkim.org/kim-api/kim-api-%{version}.txz
 BuildRequires:       gcc-c++ gcc-gfortran pkgconfig bash-completion
@@ -55,26 +55,24 @@ pushd build
 %make_install -C build
 mkdir -p %{buildroot}%{_datadir}/emacs/site-lisp
 mv %{buildroot}/usr/share/emacs/site-lisp/kim-api/kim-api-c-style.el %{buildroot}%{_datadir}/emacs/site-lisp/kim-api-c-style.el
+rm %{buildroot}/usr/share/doc/kim-api/{LICENSE.LGPL,NEWS}
+
 %ldconfig_scriptlets
 
 %files
-%doc README.md
-%license LICENSE.CDDL
+%doc README.md NEWS
+%license LICENSE.LGPL
 %{_bindir}/kim-api-*
 %dir %{_libexecdir}/kim-api
-%{_libexecdir}/kim-api/kim-api-collections-info
-%{_libexecdir}/kim-api/kim-api-simulator-model
-%{_libexecdir}/kim-api/kim-api-shared-library-test
-%{_libdir}/libkim-api.so.%{sover}
+%{_libexecdir}/kim-api/kim-api-*
+%{_libdir}/libkim-api.so.%{sover}*
 %{b_compdir}/kim-api-collections-management.bash
 %{z_compdir}/_kim-api-collections-management
-%{z_compdir}/kim-api-collections-management.bash
 %{_datadir}/emacs/site-lisp/kim-api-c-style.el
 
 %files devel
 %{_includedir}/kim-api/
 %{_libdir}/kim-api/mod/
-%{_libdir}/kim-api/cmake/
 %{_datadir}/cmake/
 %dir %{_libdir}/kim-api/
 %{_libdir}/libkim-api.so
@@ -86,5 +84,8 @@ mv %{buildroot}/usr/share/emacs/site-lisp/kim-api/kim-api-c-style.el %{buildroot
 %{_libdir}/kim-api/simulator-models/
 
 %changelog
+* Tue Apr 18 2023 liyanan <thistleslyn@163.com> - 2.3.0-1
+- Update to 2.3.0
+
 * Mon Jul 27 2020 zhanghua <zhanghua40@huawei.com> - 2.1.3-1
 - package init
