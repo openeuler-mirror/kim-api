@@ -1,7 +1,7 @@
 Name:                kim-api
 Version:             2.1.3
 %global sover   2
-Release:             1
+Release:             2
 Summary:             Open Knowledgebase of Interatomic Models KIM API
 License:             CDDL-1.0
 Url:                 https://www.openkim.org
@@ -46,6 +46,10 @@ This package contains the example models for the KIM-API.
 %setup -q
 
 %build
+%if "%toolchain" == "clang"
+export FFLAGS='-O2  -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fasynchronous-unwind-tables  -fexceptions -I/usr/lib64/gfortran/modules'
+export LDFLAGS='-Wl,-z,relro -Wl,-z,now -Wl,--build-id=sha1  -O2  -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fstack-protector-strong -fasynchronous-unwind-tables  -fexceptions -I/usr/lib64/gfortran/modules'
+%endif
 mkdir build
 pushd build
 %{cmake3} -DCMAKE_SKIP_RPATH=ON -DCMAKE_INSTALL_LIBEXECDIR=%{_libexecdir} -DBASH_COMPLETION_COMPLETIONSDIR=%{b_compdir} -DZSH_COMPLETION_COMPLETIONSDIR=%{z_compdir} ..
@@ -86,5 +90,8 @@ mv %{buildroot}/usr/share/emacs/site-lisp/kim-api/kim-api-c-style.el %{buildroot
 %{_libdir}/kim-api/simulator-models/
 
 %changelog
+* Wed Apr 26 2023 Xiaoya Huang <huangxiaoya@iscas.ac.cn> - 2.1.3-2
+- Fix CC compiler support
+
 * Mon Jul 27 2020 zhanghua <zhanghua40@huawei.com> - 2.1.3-1
 - package init
